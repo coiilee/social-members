@@ -1,5 +1,7 @@
 package kh.edu.social_members.controller;
 
+import kh.edu.social_members.service.MemberServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +39,11 @@ public class KakaoController {
     //${변수이름} 은 application.properties 나 config.properties 에 작성한 변수 이름 가져오기
     //변수이름에 해당하는 값을 불러오기
 
-    @org.springframework.beans.factory.annotation.Value("${kakao.client-id}")
+    @Value("${kakao.client-id}")
     private String kakaoClientId;
+
+    @Autowired
+    private MemberServiceImpl memberService;
 
     /* config.properties에서 kakao.redirect-uri를 아래처럼 직접적으로 가져올 수 있음.
     private String kakao.redirect-uri=http://localhost:8080/oauth/kakao/callback
@@ -48,7 +53,7 @@ public class KakaoController {
     @Value 값으로 호출해서 사용할 수 있도록 분류해주는 것이 바람직함.
 
      */
-    @org.springframework.beans.factory.annotation.Value("${kakao.redirect-uri}") // = ${REDIRECT-URI}
+    @Value("${kakao.redirect-uri}") // = ${REDIRECT-URI}
     private String redirectUri;
 
     @Value("${kakao.client-secret}")
@@ -108,6 +113,8 @@ public class KakaoController {
 
         Map<String, Object> properties = (Map<String, Object>) userInfo.get("properties");
         String nickname = (String) properties.get("nickname");
+        String encodedNickname = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
+
         String profileImage = (String) properties.get("profile_image");
 
         Map<String, Object> kakaoAccount = (Map<String, Object>) userInfo.get("kakao_account");
@@ -117,14 +124,13 @@ public class KakaoController {
         String gender = (String) kakaoAccount.get("gender");
 
 
-        String encodedNickname = URLEncoder.encode(nickname, StandardCharsets.UTF_8);
 
 
         // 키-값 받아오기 위해 키-값 시작을 알리는 것은 '?' 기호를 사용함
         // 키-값 여러 값을 받아오고 전달할 경우는 '&' 기호로 키-값 다수 사용
-        return "redirect:/signup?nickname=" + encodedNickname + "&email=" + email
-                + "&name=" + encodedName + "&gender=" + gender
-                + "&profileImage=" + profileImage;
+        return "redirect:/signup?nickname=" + encodedNickname + "&email=" + email +
+                "&name=" + encodedName + "&gender=" + gender
+                + "&profileImg=" + profileImage;
 
         /* signup.html 에서 회원가입란을 작성하지 않고, 카카오 로그인 클릭 후 바로 db에 저장하는 방식
 
