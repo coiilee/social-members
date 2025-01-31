@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Members {
+public class Member {
     @Id
     @GeneratedValue
 

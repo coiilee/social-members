@@ -14,11 +14,16 @@ public class ViewController {
     }
 
     @GetMapping("/signup")
-    public String signup(@RequestParam("name") String name, @RequestParam("gender") String gender,
-                         @RequestParam("email") String email, Model model) {
+    public String signup(@RequestParam("name") String name,
+                         @RequestParam("gender") String gender,
+                         @RequestParam("email") String email,
+                         @RequestParam("nickname")String nickname,
+                         @RequestParam("profile_image")String profileImage, Model model) {
         model.addAttribute("name", name);
         model.addAttribute("gender", gender);
         model.addAttribute("email", email);
+        model.addAttribute("nickname", nickname);
+        model.addAttribute("profileImage", profileImage);
         return "signup";
     }
 

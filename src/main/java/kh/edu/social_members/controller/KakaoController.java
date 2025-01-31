@@ -120,6 +120,7 @@ public class KakaoController {
         Map<String, Object> kakaoAccount = (Map<String, Object>) userInfo.get("kakao_account");
         String email = (String) kakaoAccount.get("email");
         String name = (String) kakaoAccount.get("name");
+
         String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8); //한글 깨짐 방지
         String gender = (String) kakaoAccount.get("gender");
 
@@ -130,7 +131,7 @@ public class KakaoController {
         // 키-값 여러 값을 받아오고 전달할 경우는 '&' 기호로 키-값 다수 사용
         return "redirect:/signup?nickname=" + encodedNickname + "&email=" + email +
                 "&name=" + encodedName + "&gender=" + gender
-                + "&profileImg=" + profileImage;
+                + "&profile_image=" + profileImage;
 
         /* signup.html 에서 회원가입란을 작성하지 않고, 카카오 로그인 클릭 후 바로 db에 저장하는 방식
 
